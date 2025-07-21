@@ -8,8 +8,7 @@ const Navbar = () => {
   const { user, logout } = useAuthStore();
   const [showMenu, setShowMenu] = useState(false);
 
-  const avatarUrl = user
-    ? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+  const avatarUrl = user? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
         user.username
       )}`
     : "";
@@ -21,16 +20,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-black text-gray-200 flex justify-between items-center p-4 h-20 text-sm md:text-[15px] font-medium text-nowrap">
+    <nav className="bg-black text-gray-200 flex justify-between items-center p-5 pb-1 h-17 text-sm md:text-[15px] font-medium text-nowrap">
       <Link to={"/"}>
         <img
-          src=""
+          src="../public/logo.png"
           alt="Logo"
-          className="w-24 cursor-pointer brightness-125"
+          className="w-14 rounded-full cursor-pointer brightness-125"
         />
       </Link>
 
-      <ul className="hidden xl:flex space-x-6">
+      <ul className="flex space-x-6">
         <li className="cursor-pointer hover:text-[#e50914]">Home</li>
         <li className="cursor-pointer hover:text-[#e50914]">Tv Shows</li>
         <li className="cursor-pointer hover:text-[#e50914]">Movies</li>

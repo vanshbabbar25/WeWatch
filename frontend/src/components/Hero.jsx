@@ -1,30 +1,32 @@
 import React, { useEffect,useState } from 'react'
+import { Link } from 'react-router-dom';
+
 import { Bookmark,Play } from 'lucide-react'
 const Hero = () => {
 
-     const [movie, setMovie] = useState(null);
+    const [movie, setMovie] = useState(null);
     const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
-  }
-};
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
+      }
+    };
 
-useEffect(()=>{
-     fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
-     .then(res => res.json())
-     .then(res => {
-        if(res.results && res.results.length > 0){
-         const randomIndex = Math.floor(Math.random() * res.results.length);
-          setMovie(res.results[randomIndex]);
-        }
-     })
-     .catch(err => console.error(err));
-},[])
- if (!movie) {
-    return <p>Loading...</p>;
-  }
+    useEffect(()=>{
+        fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
+        .then(res => res.json())
+        .then(res => {
+            if(res.results && res.results.length > 0){
+            const randomIndex = Math.floor(Math.random() * res.results.length);
+              setMovie(res.results[randomIndex]);
+            }
+        })
+        .catch(err => console.error(err));
+    },[])
+    if (!movie) {
+        return <p>Loading...</p>;
+      }
 
 
   return (

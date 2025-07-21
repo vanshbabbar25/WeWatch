@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../store/authStore";
 
+
 const SignUp = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
