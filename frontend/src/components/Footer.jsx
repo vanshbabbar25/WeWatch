@@ -3,15 +3,11 @@ import React from 'react'
 const Footer = () => {
   return (
     <div>
-      <div className="text-[#737373] md:px-10">
-        <div className="py-20">
+      <div className=" text-[#737373] bg-[#0e0701]  inset-0 bg-gradient-to-b from-[#392211] via-transparent to-transparent md:px-10 mt-10 ">
+        <div className="py-6 text-2xl">
             <p>Developed by Vansh Babbar</p>
-            <p>
-            Read about Netflix TV shows and movies and watch bonus videos on
-            Tudum.com.
-            </p>
         </div>
-        <p className="pb-5">Questions? Contact us.</p>
+        <p className="pb-2">Questions? Contact us.</p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 text-sm pb-10 max-w-5xl">
             <ul className="flex flex-col space-y-2">

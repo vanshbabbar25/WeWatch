@@ -48,7 +48,7 @@ const Moviepage = () => {
   if (!movie) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <span className="text-xl text-red-500">Loading...</span>
+        <span className="text-xl text-[#e1b797]">Loading...</span>
       </div>
     );
   }
@@ -65,7 +65,7 @@ const Moviepage = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-transparent to-transparent"></div>
 
-        <div className="relative z-10 flex items-end p-8 gap-8">
+        <div className="relative bg-black/55 w-full z-10 flex items-end p-8 gap-8">
           <img
             src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
             className="rounded-lg shadow-lg w-48 hidden md:block"
@@ -85,12 +85,12 @@ const Moviepage = () => {
                 </span>
               ))}
             </div>
-            <p className="max-w-2xl text-gray-200">{movie.overview}</p>
+            <p className="max-w-2xl text-gray-200">{movie.overview.slice(0,500)} .....</p>
             <Link
               to={`https://www.youtube.com/watch?v=${trailerKey}`}
               target="_blank"
             >
-              <button className="flex justify-center items-center bg-[#e50914]  text-white py-3 px-4 rounded-full cursor-pointer text-sm md:text-base mt-2 md:mt-4">
+              <button className="flex justify-center items-center bg-[#784923]  text-white py-3 px-4 rounded-full cursor-pointer text-sm md:text-base mt-2 md:mt-4">
                 <Play className="mr-2 w-4 h-5 md:w-5 md:h-5" /> Watch Now
               </button>
             </Link>
