@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react'
-
-import Navbar from './components/Navbar'
 import Homepage from './pages/Homepage'
-import Moviepage from './pages/MoviePage'
+import MoviePage from './pages/MoviePage'
 import AIRecommendations from './pages/AIRecommendations'
 import { Routes,Route } from 'react-router'
-import { Import } from 'lucide-react'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import { Toaster } from 'react-hot-toast'
@@ -26,7 +23,7 @@ function App() {
         <Toaster></Toaster>
         <Routes>
             <Route path={"/"} element={<Homepage />} />
-            <Route path={"/movie/:id"} element={<Moviepage />} />
+            <Route path={"/movie/:id"} element={<MoviePage />} />
             <Route path={"/signin"} element={<SignIn />} />
             <Route path={"/signup"} element={<SignUp />} />
             <Route path={"/ai-recommendations"} element={<AIRecommendations />} />

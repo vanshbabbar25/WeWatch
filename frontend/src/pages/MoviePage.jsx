@@ -2,7 +2,7 @@ import { Play } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 
-const Moviepage = () => {
+const MoviePage = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
@@ -217,4 +217,4 @@ const Moviepage = () => {
   );
 };
 
-export default Moviepage;
+export default MoviePage;
