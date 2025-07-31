@@ -117,8 +117,8 @@ const AIRecommendations = () => {
               .replace(/```json\n/i, "")
               .replace(/\n```/i, "");
             try {
-            //  const recommendationArray = JSON.parse(cleanedResult);
-                const recommendationArray = [
+              const recommendationArray = JSON.parse(cleanedResult);
+            //    const recommendationArray = [
                   "The Social Network",
                   "1917",
                   "Knives Out",
@@ -127,7 +127,7 @@ const AIRecommendations = () => {
                   "Dune",
                   "La La Land",
                   "Get Out"
-                ]; 
+              //  ]; 
                 setRecommendation(recommendationArray);
                 fetchMovies(recommendationArray);
 
@@ -239,13 +239,9 @@ const showfun = async (title) => {
       ) :
       ( 
         <div className="text-white bg-[#784923] h-100% text-center">
-          <h3 className="text-3xl font-bold font-serif pt-5">According to Your Mood</h3>
+          <h3 className="text-3xl font-bold font-serif pt-5">We Suggests you</h3>
           <ul className="space-y-2 ">
            <div className="flex flex-wrap justify-center">
-
-
-
-
             {movieDetails.map((movie, index) => (
               <Link to={`/movie/${movie.id}`}>
               <div

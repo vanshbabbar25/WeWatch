@@ -4,14 +4,16 @@ import User from './models/user.model.js';
 import bcryptjs from "bcrypt";
 import jwt from "jsonwebtoken";
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+dotenv.config();
+
 import cors from 'cors';
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({  origin: [
-    "http://localhost:5173", // for local
-    "https://zn79zlfs-5173.inc1.devtunnels.ms", // for your VS Code tunnel
+    process.env.CLIENT_URL,
   ],credentials:true }))
 const PORT = 5000;
 app.get("/",(req,res)=>{
@@ -45,7 +47,7 @@ app.post("/api/signup",async(req,res)=>{
             //jwt
             if (userDoc) {
                 // jwt.sign(payload, secret, options)
-                const token = jwt.sign({ id: userDoc._id }, "your_jwt_secret", { expiresIn: "7d" });
+                const token = jwt.sign({ id: userDoc._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 
                 res.cookie("token", token, {
@@ -75,7 +77,7 @@ app.post("/api/login", async (req, res) => {
     }
     if (userDoc) {
         // jwt.sign(payload, secret, options)
-        const token = jwt.sign({ id: userDoc._id }, "your_jwt_secret", { expiresIn: "7d" });
+        const token = jwt.sign({ id: userDoc._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 
         res.cookie("token", token, {
@@ -98,7 +100,7 @@ app.get("/api/fetch-user",async(req,res)=>{
         return res.status(401).json({ message: "No token provided." });
      }
     try {
-        const decoded = jwt.verify(token, "your_jwt_secret");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
           return res.status(401).json({ message: "Invalid token" });
         }

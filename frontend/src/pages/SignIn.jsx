@@ -60,6 +60,7 @@ const SignIn = () => {
             Sign In
           </button>
         </form>
+        {isLoading && (<div className="text-[#e1b797]">signing...</div>)}
 
         <div className="mt-10 text-[#b16b34] text-sm">
           <p>
@@ -68,7 +69,7 @@ const SignIn = () => {
               onClick={() => navigate("/signup")}
               className="text-[#e1b797] font-medium cursor-pointer ml-2 hover:underline"
             >
-              Sign Up Now
+              Create Account
             </span>
           </p>
         </div>
