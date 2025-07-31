@@ -7,7 +7,7 @@ import AIRecommendations from './pages/AIRecommendations'
 import { Routes,Route } from 'react-router'
 import { Import } from 'lucide-react'
 import SignIn from './pages/SignIn'
-import SignUp from './pages/SignUp.JSX'
+import SignUp from './pages/SignUp'
 import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store/authStore'
 
