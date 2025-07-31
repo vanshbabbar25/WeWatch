@@ -27,8 +27,8 @@ const SignIn = () => {
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat px-4 md:px-8 py-10"
       style={{
-        backgroundImage:
-          "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('./bg.png')",
+        backgroundImage: "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/bg.png')",
+
       }}
     >  
       <div className="max-w-[450px] w-full bg-black/60 rounded px-8 py-14 mx-auto mt-8">
