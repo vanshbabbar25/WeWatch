@@ -3,19 +3,14 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const API_URL = "https://wewatch-9dnk.onrender.com/api"
-//const API_URL = "http://localhost:5000/api";
-
+const API_URL = "https://wewatch-9dnk.onrender.com/api";
 
 export const useAuthStore = create((set) => ({
-  // initial states
   user: null,
   isLoading: false,
   error: null,
   message: null,
   fetchingUser: true,
-
-  // functions
 
   signup: async (username, email, password) => {
     set({ isLoading: true, message: null });
@@ -31,80 +26,67 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response.data.message || "Error Signing up",
+        error: error.response?.data?.message || "Error signing up",
       });
-
       throw error;
     }
   },
-   
+
   login: async (username, password) => {
     set({ isLoading: true, message: null });
+
     try {
-        const response = await axios.post(`${API_URL}/login`,{
-            username,
-            password,
-        })
-        const{user,message} = response.data;
+      const response = await axios.post(`${API_URL}/login`, {
+        username,
+        password,
+      });
 
-        set({
-            user,message,isLoading: false,
-        })
-        return{user,message};
-
+      const { user, message } = response.data;
+      set({ user, message, isLoading: false });
+      return { user, message };
     } catch (error) {
-        set({
-           isLoading: false,
-           error: error.response.data.message || "Error logging in",
-        })  
-        throw error; 
-    }   
+      set({
+        isLoading: false,
+        error: error.response?.data?.message || "Error logging in",
+      });
+      throw error;
+    }
   },
 
-fetchUser: async () => {
-  set({ fetchingUser: true, error: null });
+  fetchUser: async () => {
+    set({ fetchingUser: true, error: null });
 
-  try {
-    const response = await axios.get(`${API_URL}/fetch-user`);
-    set({ user: response.data.user, fetchingUser: false });
-  } catch (error) {
-    if (error.response?.status === 401) {
-      // User not logged in — silent fail
-      console.log("Not logged in, skipping fetchUser");
-    } else {
-      console.error("Unexpected fetchUser error:", error);
+    try {
+      const response = await axios.get(`${API_URL}/fetch-user`);
+      set({ user: response.data.user, fetchingUser: false });
+    } catch (error) {
+      if (error.response?.status === 401) {
+        console.log("Not logged in, skipping fetchUser");
+      } else {
+        console.error("Unexpected fetchUser error:", error);
+      }
+      set({ fetchingUser: false, user: null });
     }
-
-    set({
-      fetchingUser: false,
-      user: null,
-    });
-  }
-},
-
+  },
 
   logout: async () => {
     set({ isLoading: true, error: null, message: null });
 
     try {
       const response = await axios.post(`${API_URL}/logout`);
-      const { message } = response.data;
       set({
-        message,
-        isLoading: false,
+        message: response.data.message,
         user: null,
+        isLoading: false,
         error: null,
       });
-
-      return { message };
+      return { message: response.data.message };
     } catch (error) {
       set({
         isLoading: false,
-        error: error.response.data.message || "Error logging out",
+        error: error.response?.data?.message || "Error logging out",
       });
-
       throw error;
     }
   },
-})
-)
+}));
