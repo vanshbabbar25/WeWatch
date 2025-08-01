@@ -7,14 +7,23 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import cors from 'cors';
-
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({  origin: [
-    process.env.CLIENT_URL,
-  ],credentials:true }))
+import cors from "cors";
+
+const allowedOrigins = [
+  "http://localhost:5173",              // local Vite dev server
+  "https://your-frontend.onrender.com"  // replace with your deployed frontend (if any)
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
 const PORT = 5000;
 app.get("/",(req,res)=>{
     res.send("hello");
@@ -51,8 +60,9 @@ app.post("/api/signup",async(req,res)=>{
 
 
                 res.cookie("token", token, {
-                    httpOnly: true,
-                    sameSite: "strict",
+                httpOnly: true,
+                sameSite: isProd ? "None" : "Lax",
+                secure: isProd, // secure cookies only over HTTPS
                 });
                 }
 
@@ -82,8 +92,9 @@ app.post("/api/login", async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "strict",
-        });
+            sameSite: isProd ? "None" : "Lax",
+            secure: isProd, // secure cookies only over HTTPS
+            });
     }
     return res.status(200).json({ user: userDoc, message: "logged in successfully." });
 

@@ -172,7 +172,7 @@ const showfun = async (title) => {
     const json = await res.json();
     if (json.results && json.results.length > 0) {
       console.log("✅ Found:", json.results[0].title);
-      return json.results[0]; // ✅ Return the result here
+      return json.results[0];
     } else {
       console.log("❌ Not found for:", title);
       return null;

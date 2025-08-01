@@ -2,7 +2,10 @@ import { create } from "zustand";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
+
 const API_URL = "https://wewatch-9dnk.onrender.com/api"
+//const API_URL = "http://localhost:5000/api";
+
 
 export const useAuthStore = create((set) => ({
   // initial states
@@ -58,22 +61,27 @@ export const useAuthStore = create((set) => ({
     }   
   },
 
-  fetchUser: async () => {
-    set({ fetchingUser: true, error: null });
+fetchUser: async () => {
+  set({ fetchingUser: true, error: null });
 
-    try {
-      const response = await axios.get(`${API_URL}/fetch-user`);
-      set({ user: response.data.user, fetchingUser: false });
-    } catch (error) {
-      set({
-        fetchingUser: false,
-        error: null,
-        user: null,
-      });
-
-      throw error;
+  try {
+    const response = await axios.get(`${API_URL}/fetch-user`);
+    set({ user: response.data.user, fetchingUser: false });
+  } catch (error) {
+    if (error.response?.status === 401) {
+      // User not logged in — silent fail
+      console.log("Not logged in, skipping fetchUser");
+    } else {
+      console.error("Unexpected fetchUser error:", error);
     }
-  },
+
+    set({
+      fetchingUser: false,
+      user: null,
+    });
+  }
+},
+
 
   logout: async () => {
     set({ isLoading: true, error: null, message: null });
