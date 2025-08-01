@@ -4,6 +4,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const API_URL = "https://wewatch-9dnk.onrender.com/api";
+//const API_URL = "http://localhost:5000/api";
 
 export const useAuthStore = create((set) => ({
   user: null,
@@ -23,7 +24,7 @@ signup: async (username, email, password) => {
     });
     set({ user: response.data.user, isLoading: false });
   } catch (error) {
-    console.log("❌ Signup error response:", error.response?.data); 
+    console.log("❌ Signup error response:", error.response?.data); // <-- ADD THIS
     set({
       isLoading: false,
       error: error.response?.data?.message || "Error Signing up",

@@ -131,12 +131,12 @@ const AIRecommendations = () => {
                 setRecommendation(recommendationArray);
                 fetchMovies(recommendationArray);
 
-              console.log(recommendationArray);
+              console.log("from generateRecommendations" +recommendationArray);
               fetchMovies(recommendationArray);
             } catch (error) {
 
               toast.error("Limit exceeded for today. please try after 24hrs");
-              console.log("Error:", error);
+              console.log("Error from generateRecommendations:", error);
             }
             setIsLoading(false)
           } else {
@@ -150,38 +150,37 @@ const fetchMovies = async (arr) => {
     const movie = await showfun(arr[i]);
     if (movie) allMovies.push(movie); // only push if movie is found
   }
-  setMovieDetails(allMovies);
-  console.log("wooo"+allMovies) // store all in state
-  console.log(movieDetails) // store all in state
+  setMovieDetails(allMovies); // store all in state
+  console.log("from fetchmovies"+movieDetails) // store all in state
 };
 
 const showfun = async (title) => {
-  const cleanedTitle = title.replace(/\(\d{4}\)/, '').trim();
-  const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(cleanedTitle)}&include_adult=false&language=en-US&page=1`;
+      const cleanedTitle = title.replace(/\(\d{4}\)/, '').trim();
+      const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(cleanedTitle)}&include_adult=false&language=en-US&page=1`;
 
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
-    }
-  };
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
+        }
+      };
 
-  try {
-    const res = await fetch(url, options);
-    const json = await res.json();
-    if (json.results && json.results.length > 0) {
-      console.log("✅ Found:", json.results[0].title);
-      return json.results[0];
-    } else {
-      console.log("❌ Not found for:", title);
-      return null;
-    }
-  } catch (err) {
-    console.error("Fetch Error:", err);
-    return null;
-  }
-};
+      try {
+        const res = await fetch(url, options);
+        const json = await res.json();
+        if (json.results && json.results.length > 0) {
+          console.log("from show fun✅ Found:", json.results[0].title);
+          return json.results[0];
+        } else {
+          console.log("from showfun ❌ Not found for:", title);
+          return null;
+        }
+      } catch (err) {
+        console.error("Fetch Error:", err);
+        return null;
+      }
+    };
 
 
   return (
@@ -237,8 +236,18 @@ const showfun = async (title) => {
 
 
       ) :
-      ( 
-        <div className="text-white bg-[#784923] h-100% text-center">
+      ( movieDetails.length  == 0 ?
+        (<div className="flex justify-center items-center h-screen w-screen">
+            <h3 className="text-white bg-[#784923] w-[50%] text-center text-3xl font-bold font-serif mt-[-80px]">
+              Please Wait... <br /><br />
+              While WeWatch Is Suggesting You <br />
+              What To Watch
+            </h3>
+          </div>
+          )
+        :(
+        <div>
+          <div className="text-white bg-[#784923] h-100% text-center">
           <h3 className="text-3xl font-bold font-serif pt-5">We Suggests you</h3>
           <ul className="space-y-2 ">
            <div className="flex flex-wrap justify-center">
@@ -272,6 +281,9 @@ const showfun = async (title) => {
 
 
         </div>
+        </div>
+      )
+
         
         
       )}
