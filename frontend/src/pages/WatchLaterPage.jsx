@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getWatchLater } from "../api/watchLaterApi";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const WatchLaterPage = () => {
     const [movies, setMovies] = useState([]);

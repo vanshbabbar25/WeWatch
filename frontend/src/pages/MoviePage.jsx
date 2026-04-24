@@ -1,6 +1,6 @@
 import { Play, Check, Plus, Bookmark } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useParams } from "react-router-dom";
 import { useRecommendation } from "../context/RecommendationContext";
 import { addToWatchLater, getWatchLater, removeFromWatchLater } from "../api/watchLaterApi";
 import Navbar from "../components/Navbar";
@@ -9,8 +9,7 @@ const options = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
+    Authorization: import.meta.env.VITE_TMDB_TOKEN
   },
 };
 

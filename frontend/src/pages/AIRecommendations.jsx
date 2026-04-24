@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getAIRecommendation } from '../lib/AIModel';
 import toast from "react-hot-toast";
 import Navbar from '../components/Navbar';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const steps = [
   {
@@ -145,7 +145,7 @@ const AIRecommendations = () => {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
+        Authorization: import.meta.env.VITE_TMDB_TOKEN
       }
     };
 
