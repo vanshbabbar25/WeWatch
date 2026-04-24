@@ -9,8 +9,8 @@ const TMDB_BASE = "https://api.themoviedb.org/3";
  * @returns {Promise<Object[]>} - Deduplicated array of TMDB movie objects
  */
 async function fetchCandidatesFromTMDB(genreIds, pages = 3) {
-  if (!process.env.TMDB_API_KEY) {
-    throw new Error("TMDB_API_KEY is not set in environment variables");
+  if (!process.env.TMDB_TOKEN) {
+    throw new Error("TMDB_TOKEN is not set in environment variables");
   }
 
   const genreParam = genreIds.join(",");
@@ -18,8 +18,11 @@ async function fetchCandidatesFromTMDB(genreIds, pages = 3) {
   // Fire all page requests in parallel
   const requests = Array.from({ length: pages }, (_, i) =>
     axios.get(`${TMDB_BASE}/discover/movie`, {
+      headers: {
+        Authorization: process.env.TMDB_TOKEN,
+        accept: "application/json"
+      },
       params: {
-        api_key: process.env.TMDB_API_KEY,
         with_genres: genreParam,
         sort_by: "popularity.desc",
         page: i + 1,
@@ -52,7 +55,10 @@ async function fetchCandidatesFromTMDB(genreIds, pages = 3) {
  */
 async function fetchTrending() {
   const res = await axios.get(`${TMDB_BASE}/trending/movie/week`, {
-    params: { api_key: process.env.TMDB_API_KEY },
+    headers: {
+      Authorization: process.env.TMDB_TOKEN,
+      accept: "application/json"
+    },
     timeout: 8000,
   });
   return res.data.results || [];
