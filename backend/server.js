@@ -16,21 +16,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ===== ENV CHECK =====
-const isProd = process.env.NODE_ENV === "production";
+app.use(cors({
+  origin: [
+    "https://we-watch-eight.vercel.app",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
 
 // ===== MIDDLEWARE =====
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: isProd
-      ? ["https://wewatch-1.onrender.com"] // your deployed frontend
-      : ["http://localhost:5173"],
-    credentials: true,
-  })
-);
+
 
 // ===== AUTH MIDDLEWARE =====
 const requireAuth = async (req, res, next) => {
