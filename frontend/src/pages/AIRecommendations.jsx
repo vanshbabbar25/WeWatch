@@ -1,4 +1,4 @@
-import React, { useState,setView } from 'react';
+import React, { useState } from 'react';
 import { getAIRecommendation } from '../lib/AIModel';
 import toast from "react-hot-toast";
 import Navbar from '../components/Navbar';
@@ -78,26 +78,21 @@ const AIRecommendations = () => {
       setStep(step + 1);
     }
   };
-  const onClicked=(e)=>{
-     console.log(inputs);
-  }
 
-    const generateRecommendations = async () => {
-      setIsLoading(true);
-      const userPrompt = `Given the following user inputs:
+
+  const generateRecommendations = async () => {
+    setIsLoading(true);
+    const userPrompt = `Given the following user inputs:
       - Decade: ${inputs.decade}
       - Genre: ${inputs.genre}
       - Language: ${inputs.language}
       - Length: ${inputs.length}
       - Mood: ${inputs.mood}
 
-      Recommend 9 ${inputs.mood.toLowerCase()} ${
-            inputs.language
-          }-language ${inputs.genre.toLowerCase()} movies released in the ${
-            inputs.decade
-          } with a runtime between ${
-            inputs.length
-          }. Return the list as plain JSON array of movie titles only, No extra text, no explanations, no code blocks, no markdown, just the JSON array.
+      Recommend 9 ${inputs.mood.toLowerCase()} ${inputs.language
+      }-language ${inputs.genre.toLowerCase()} movies released in the ${inputs.decade
+      } with a runtime between ${inputs.length
+      }. Return the list as plain JSON array of movie titles only, No extra text, no explanations, no code blocks, no markdown, just the JSON array.
           example:
       [
         "Movie Title 1",
@@ -111,187 +106,190 @@ const AIRecommendations = () => {
         "Movie Title 9"
       ]`;
 
-          const result = await getAIRecommendation(userPrompt);
-          if (result) {
-            const cleanedResult = result
-              .replace(/```json\n/i, "")
-              .replace(/\n```/i, "");
-            try {
-              const recommendationArray = JSON.parse(cleanedResult);
-            //    const recommendationArray = [
-                  "The Social Network",
-                  "1917",
-                  "Knives Out",
-                  "Soul",
-                  "Coco",
-                  "Dune",
-                  "La La Land",
-                  "Get Out"
-              //  ]; 
-                setRecommendation(recommendationArray);
-                fetchMovies(recommendationArray);
-
-              console.log("from generateRecommendations" +recommendationArray);
-              fetchMovies(recommendationArray);
-            } catch (error) {
-
-              toast.error("Limit exceeded for today. please try after 24hrs");
-              console.log("Error from generateRecommendations:", error);
-            }
-            setIsLoading(false)
-          } else {
-            toast.error("Failed to get recommendations.");
-          }
-  };
-const fetchMovies = async (arr) => {
-  const allMovies = [];
-
-  for (let i = 0; i < arr.length; i++) {
-    const movie = await showfun(arr[i]);
-    if (movie) allMovies.push(movie); // only push if movie is found
-  }
-  setMovieDetails(allMovies); // store all in state
-  console.log("from fetchmovies"+movieDetails) // store all in state
-};
-
-const showfun = async (title) => {
-      const cleanedTitle = title.replace(/\(\d{4}\)/, '').trim();
-      const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(cleanedTitle)}&include_adult=false&language=en-US&page=1`;
-
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
-        }
-      };
+    const result = await getAIRecommendation(userPrompt);
+    if (result && result !== "Failed to get response.") {
+      // Safely extract the JSON array from the response
+      const match = result.match(/\[[\s\S]*\]/);
+      const cleanedResult = match ? match[0] : result;
 
       try {
-        const res = await fetch(url, options);
-        const json = await res.json();
-        if (json.results && json.results.length > 0) {
-          console.log("from show fun✅ Found:", json.results[0].title);
-          return json.results[0];
-        } else {
-          console.log("from showfun ❌ Not found for:", title);
-          return null;
-        }
-      } catch (err) {
-        console.error("Fetch Error:", err);
-        return null;
+        const recommendationArray = JSON.parse(cleanedResult);
+        setRecommendation(recommendationArray);
+        await fetchMovies(recommendationArray);
+      } catch (error) {
+        toast.error("Failed to parse AI response. Please try again.");
+        console.log("Error from generateRecommendations (JSON parse):", error, result);
+        setRecommendation(null); // Reset on error
+      }
+    } else {
+      toast.error("Failed to get recommendations. Limit exceeded or API error.");
+    }
+    setIsLoading(false);
+  };
+  const fetchMovies = async (arr) => {
+    const allMovies = [];
+
+    for (let i = 0; i < arr.length; i++) {
+      const movie = await showfun(arr[i]);
+      if (movie) allMovies.push(movie); // only push if movie is found
+    }
+    setMovieDetails(allMovies); // store all in state
+    console.log("from fetchmovies" + movieDetails) // store all in state
+  };
+
+  const showfun = async (title) => {
+    const cleanedTitle = title.replace(/\(\d{4}\)/, '').trim();
+    const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(cleanedTitle)}&include_adult=false&language=en-US&page=1`;
+
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
       }
     };
+
+    try {
+      const res = await fetch(url, options);
+      const json = await res.json();
+      if (json.results && json.results.length > 0) {
+        console.log("from show fun✅ Found:", json.results[0].title);
+        return json.results[0];
+      } else {
+        console.log("from showfun ❌ Not found for:", title);
+        return null;
+      }
+    } catch (err) {
+      console.error("Fetch Error:", err);
+      return null;
+    }
+  };
 
 
   return (
     (
-      
-    <div className=" min-h-screen w-full  bg-[#784923]">
-      <Navbar></Navbar>
-      {!recommendation ? (
-        <div className='relative w-full max-w-md mx-auto rounded-2xl bg-[#5f391c] shadow-2xl border-amber-50 px-8 py-6 mt-7 flex flex-col items-center min-h-[440px]'>
-         <h2 className='text-3xl font-extrabold mb-4 text-center text-white'>AI Recommendations</h2>
-        <div>
-                {!completed ? (
-        <div className="grid grid-cols-1 gap-3 w-full">
-          <h3 className="text-lg font-semibold text-white mb-1 text-center">
-            {steps[step].label}
-          </h3>
-          {steps[step].options.map((opt) => (
-            <button
-              key={opt}
-              onClick={() => handleOption(opt)}
-              className="bg-white text-amber-950 font-medium py-2 px-4 rounded hover:bg-[#e1b797] transition-all duration-200"
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-      ) : (
-        <>
-        <div className="text-white text-center">
-          <h3 className="text-2xl font-bold mb-5">Your Preferences</h3>
-          <ul className="space-y-2 mb-5">
-            {Object.entries(inputs).map(([key, value]) => (
-              <li key={key}>
-                <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}
-              </li>
-            ))}
-          </ul>
-          
-        </div>
-        <button className='mt-5  text-amber-950 font-bold py-2 px-4 rounded bg-[#e1b797] hover:bg-[#c1ab9a] transition-all duration-200 ' onClick={generateRecommendations}>get recommendations</button>
-        {isLoading?(
-          <div className='text-[#e1b797]'>loading....</div>
-          ):
-          (
-          <div></div>
-        )
-          }
-        </> 
-      )}
-          
-        </div>
-        </div>
 
-
-      ) :
-      ( movieDetails.length  == 0 ?
-        (<div className="flex justify-center items-center h-screen w-screen">
-            <h3 className="text-white bg-[#784923] w-[50%] text-center text-3xl font-bold font-serif mt-[-80px]">
-              Please Wait... <br /><br />
-              While WeWatch Is Suggesting You <br />
-              What To Watch
-            </h3>
-          </div>
-          )
-        :(
-        <div>
-          <div className="text-white bg-[#784923] h-100% text-center">
-          <h3 className="text-3xl font-bold font-serif pt-5">We Suggests you</h3>
-          <ul className="space-y-2 ">
-           <div className="flex flex-wrap justify-center">
-            {movieDetails.map((movie, index) => (
-              <Link to={`/movie/${movie.id}`}>
-              <div
-                className="bg-amber-950 w-72 m-4 rounded-lg shadow-md hover:opacity-80 overflow-hidden hover:scale-105 transition flex flex-row gap-3 p-2"
-                key={index} onMouseEnter={() => setHoveredCard(index)}onMouseLeave={() => setHoveredCard(null)}
-              >
-                <img
-                  className="h-28 w-20 object-cover rounded"
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}  
-                />{hoveredCard === index ?
-                <div className="flex flex-col justify-between">
-                  <h4 className="text-lg my-1 mx-2 font-serif from-neutral-400">{movie.title}</h4>
-                  <h4 className="text-xs my-1 font-serif from-neutral-400">{movie.overview.slice(0, 115)} ....</h4>
-                </div>:
-                  <div className="flex flex-col justify-between">
-                  <h4 className="text-lg font-semibold my-4 mx-4 font-serif from-neutral-400">{movie.title}</h4>
-                  <p className="text-sm text-white">{movie.release_date}</p>
+      <div className=" min-h-screen w-full  bg-[#784923]">
+        <Navbar></Navbar>
+        {!recommendation ? (
+          <div className='relative pt-[70px] top-[120px] w-full max-w-md mx-auto rounded-2xl bg-[#5f391c] shadow-2xl border-amber-50 px-8 py-6 mt-7 flex flex-col items-center min-h-[440px]'>
+            <h2 className='text-3xl font-extrabold mb-4 text-center text-white'>AI Recommendations</h2>
+            <div>
+              {!completed ? (
+                <div className="grid grid-cols-1 gap-3 w-full">
+                  <h3 className="text-lg font-semibold text-white mb-1 text-center">
+                    {steps[step].label}
+                  </h3>
+                  {steps[step].options.map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => handleOption(opt)}
+                      className="bg-white text-amber-950 font-medium py-2 px-4 rounded hover:bg-[#e1b797] transition-all duration-200"
+                    >
+                      {opt}
+                    </button>
+                  ))}
                 </div>
-                }
-              </div>
-              </Link>
-            ))}
+              ) : (
+                <>
+                  <div className="text-white text-center">
+                    <h3 className="text-2xl font-bold mb-5">Your Preferences</h3>
+                    <ul className="space-y-2 mb-5">
+                      {Object.entries(inputs).map(([key, value]) => (
+                        <li key={key}>
+                          <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}
+                        </li>
+                      ))}
+                    </ul>
+
+                  </div>
+                  <button className='mt-5  text-amber-950 font-bold py-2 px-4 rounded bg-[#e1b797] hover:bg-[#c1ab9a] transition-all duration-200 ' onClick={generateRecommendations}>get recommendations</button>
+                  {isLoading ? (
+                    <div className='text-[#e1b797]'>loading....</div>
+                  ) :
+                    (
+                      <div></div>
+                    )
+                  }
+                </>
+              )}
+
+            </div>
           </div>
 
-          </ul>
 
-
-
-        </div>
-        </div>
-      )
-
-        
-        
-      )}
-
-    </div>
+        ) :
+          (movieDetails.length == 0 ?
+            (isLoading ? (
+              <div className="flex justify-center items-center h-screen w-screen">
+                <h3 className="text-white bg-[#784923] w-[50%] text-center text-3xl font-bold font-serif mt-[-80px]">
+                  Please Wait... <br /><br />
+                  While WeWatch Is Suggesting You <br />
+                  What To Watch
+                </h3>
+              </div>
+            ) : (
+              <div className="flex justify-center items-center h-screen w-screen">
+                <div className="text-white bg-[#784923] w-[50%] text-center p-8 rounded-xl shadow-2xl mt-[-80px]">
+                  <h3 className="text-3xl font-bold font-serif mb-4">
+                    Oops! No exact matches found.
+                  </h3>
+                  <p className="text-lg mb-6">
+                    The AI suggested some great movies, but we couldn't find them in our database.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setRecommendation(null);
+                      setStep(0);
+                      setCompleted(false);
+                      setInputs(initialState);
+                    }}
+                    className="bg-white text-amber-950 font-bold py-2 px-6 rounded hover:bg-[#e1b797] transition-all"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              </div>
+            ))
+            : (
+              <div>
+                <div className="text-white bg-[#784923] h-100% text-center">
+                  <h3 className="text-3xl font-bold font-serif pt-5">We Suggests you</h3>
+                  <ul className="space-y-2 ">
+                    <div className="flex flex-wrap justify-center">
+                      {movieDetails.map((movie, index) => (
+                        <Link to={`/movie/${movie.id}`}>
+                          <div
+                            className="bg-amber-950 w-72 m-4 rounded-lg shadow-md hover:opacity-80 overflow-hidden hover:scale-105 transition flex flex-row gap-3 p-2"
+                            key={index} onMouseEnter={() => setHoveredCard(index)} onMouseLeave={() => setHoveredCard(null)}
+                          >
+                            <img
+                              className="h-28 w-20 object-cover rounded"
+                              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                              alt={movie.title}
+                            />{hoveredCard === index ?
+                              <div className="flex flex-col justify-between">
+                                <h4 className="text-lg my-1 mx-2 font-serif from-neutral-400">{movie.title}</h4>
+                                <h4 className="text-xs my-1 font-serif from-neutral-400">{movie.overview.slice(0, 115)} ....</h4>
+                              </div> :
+                              <div className="flex flex-col justify-between">
+                                <h4 className="text-lg font-semibold my-4 mx-4 font-serif from-neutral-400">{movie.title}</h4>
+                                <p className="text-sm text-white">{movie.release_date}</p>
+                              </div>
+                            }
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </ul>
+                </div>
+              </div>
+            )
+          )}
+      </div>
     )
   );
-  
+
 };
 
 export default AIRecommendations;

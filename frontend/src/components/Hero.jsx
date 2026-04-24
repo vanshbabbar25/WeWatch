@@ -1,42 +1,43 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
-import { Bookmark,Play } from 'lucide-react'
+import { Bookmark, Play } from 'lucide-react'
+const options = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
+  }
+};
+
 const Hero = () => {
 
-    const [movie, setMovie] = useState(null);
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ'
-      }
-    };
+  const [movie, setMovie] = useState(null);
 
-    useEffect(()=>{
-        fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
-        .then(res => res.json())
-        .then(res => {
-            if(res.results && res.results.length > 0){
-            const randomIndex = Math.floor(Math.random() * res.results.length);
-              setMovie(res.results[randomIndex]);
-            }
-        })
-        .catch(err => console.error(err));
-    },[])
-    if (!movie) {
-        return <p>Loading...</p>;
-      }
+  useEffect(() => {
+    fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
+      .then(res => res.json())
+      .then(res => {
+        if (res.results && res.results.length > 0) {
+          const randomIndex = Math.floor(Math.random() * res.results.length);
+          setMovie(res.results[randomIndex]);
+        }
+      })
+      .catch(err => console.error(err));
+  }, [])
+  if (!movie) {
+    return <p>Loading...</p>;
+  }
 
 
   return (
-    <div className="text-white relative p-1 m-7">
+    <div className="text-white relative h-[700px] top-18">
       <img
         src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
         alt="bg-img"
-        className="w-full rounded-2xl h-[450px] object-cover object-center"
+        className="w-full rounded-2xl h-[700px] object-cover object-center"
       />
-      
+
       {/* Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-2xl" />
 

@@ -3,8 +3,8 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const API_URL = "https://wewatch-9dnk.onrender.com/api";
-//const API_URL = "http://localhost:5000/api";
+//const API_URL = "https://wewatch-9dnk.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 
 export const useAuthStore = create((set) => ({
   user: null,

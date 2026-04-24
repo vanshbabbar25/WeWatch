@@ -28,7 +28,7 @@ const Footer = () => {
             <li>Account</li>
             <li>Ways to Watch</li>
             <li>Corporate Information</li>
-            <li>Only on Netflix</li>
+            <li>Only on WeWatch</li>
             </ul>
 
             <ul className="flex flex-col space-y-2">

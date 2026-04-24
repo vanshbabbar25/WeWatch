@@ -1,8 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// ⚠️ Hardcoded API Key – not secure for production
-const API_KEY = import.meta.env.VITE_GOOGLE_GENAI_API_KEY;  // Replace with your real key
-
+const API_KEY = import.meta.env.VITE_GOOGLE_GENAI_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 export async function getAIRecommendation(prompt) {

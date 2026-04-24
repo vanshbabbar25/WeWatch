@@ -13,8 +13,8 @@ const Navbar = () => {
 
   const avatarUrl = user
     ? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-        user.username
-      )}&backgroundColor=transparent`
+      user.username
+    )}&backgroundColor=transparent`
     : "";
 
   const handleLogout = async () => {
@@ -30,7 +30,7 @@ const Navbar = () => {
         method: 'GET',
         headers: {
           accept: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ', 
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NGNjOTc0YzVmOTZkZGU3Y2RkZDcxM2FlM2ZhNDIzYiIsIm5iZiI6MTc1MjMwNDExNS4yOTUsInN1YiI6IjY4NzIwOWYzMjc1YmI0NmVlZTZlOWUwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Pq2LSFZQijzrDADsoXvWEJlTY2E5Hsd6NT3k4zBXRaQ',
         },
       };
 
@@ -50,7 +50,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-[#201309] text-gray-200 flex flex-col md:flex-row justify-between items-center p-4 px-10 space-y-4 md:space-y-0 text-sm md:text-base font-medium">
+    <nav className="bg-[#201309] h-[70px] text-gray-200 fixed top-0 left-0 w-full z-50 flex flex-col md:flex-row justify-between items-center p-4 px-10 space-y-5 md:space-y-0 text-sm md:text-base font-medium">
       <Link to={"/"}>
         <img
           src="/logo.png"
@@ -82,12 +82,28 @@ const Navbar = () => {
         </button>
       </form>
 
-      <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 relative">
-        <Link to={user ? "ai-recommendations" : "signin"}>
-          <button className="bg-[#784923] px-7 py-2 text-white cursor-pointer rounded-2xl">
-            Get AI Recommendations
-          </button>
-        </Link>
+      <div className="flex flex-col md:flex-row mx-4 px-4 gap-4 md:gap-8">
+        <Link to="/#"><button className="bg-[#784923] px-7 mx-1 py-2 text-white cursor-pointer rounded-2xl">
+          web Series
+        </button></Link>
+        <Link to="#"><button className="bg-[#784923] px-7 mx-1 py-2 text-white cursor-pointer rounded-2xl">
+          Trending
+        </button></Link>
+        <Link to="/watch-later"><button className="bg-[#784923] px-7 mx-1 py-2 text-white cursor-pointer rounded-2xl">
+          watch Later
+        </button></Link>
+
+        <Link to="/history"><button className="bg-[#784923] px-7 mx-1 py-2 text-white cursor-pointer rounded-2xl">
+          history
+        </button></Link>
+
+        <div className="flex flex-col md:flex-row items-center gap-5 md:gap-6 relative">
+          <Link to={user ? "ai-recommendations" : "signin"}>
+            <button className="bg-[#784923] px-7 py-2 text-white cursor-pointer rounded-2xl">
+              Get AI Recommendations
+            </button>
+          </Link>
+        </div>
 
         {!user ? (
           <Link to={"/signin"}>
